@@ -1,0 +1,264 @@
+% Solusi Latihan 4: Praktik Sistem Kendali 1
+
+>> % No. 2: Membuat fungsi transfer dalam bentuk terfaktor
+>> 'Factored'
+
+ans =
+
+    'Factored'
+ 
+>> Gzpk = zpk([-15 -26 -72],[0 -55 roots([1 5 30])' roots([1 27 52])'],5)
+
+Gzpk =
+ 
+             5 (s+15) (s+26) (s+72)
+  --------------------------------------------
+  s (s+55) (s+24.91) (s+2.087) (s^2 + 5s + 30)
+ 
+Continuous-time zero/pole/gain model.
+Model Properties
+>> 'Polynomial'
+
+ans =
+
+    'Polynomial'
+
+>> Gp = tf(Gzpk)
+
+Gp =
+ 
+                 5 s^3 + 565 s^2 + 16710 s + 140400
+  -----------------------------------------------------------------
+  s^6 + 87 s^5 + 1977 s^4 + 1.301e04 s^3 + 6.041e04 s^2 + 8.58e04 s
+ 
+Continuous-time transfer function.
+Model Properties
+
+
+>> % No. 3: Membuat fungsi transfer dalam bentuk polynomial
+>> 'Polynomial'
+
+ans =
+
+    'Polynomial'
+
+>> Gtf=tf([1 25 20 15 42],[1 13 9 37 35 50])
+
+Gtf =
+ 
+      s^4 + 25 s^3 + 20 s^2 + 15 s + 42
+  -----------------------------------------
+  s^5 + 13 s^4 + 9 s^3 + 37 s^2 + 35 s + 50
+ 
+Continuous-time transfer function.
+Model Properties
+>> 'Factored'
+
+ans =
+
+    'Factored'
+
+>> Gzpk=zpk(Gtf)
+
+Gzpk =
+ 
+        (s+24.2) (s+1.35) (s^2 - 0.5462s + 1.286)
+  ------------------------------------------------------
+  (s+12.5) (s^2 + 1.463s + 1.493) (s^2 - 0.964s + 2.679)
+ 
+Continuous-time zero/pole/gain model.
+Model Properties
+
+
+>> % No. 4 Menentukan partial-fraction expansion
+numg=[-5 -70];
+deng=[0 -45 -55 (roots([1 7 110]))' (roots([1 6 95]))'];
+[numg,deng]=zp2tf(numg',deng',1e4); % konversi zero-pole ke fungsi transfer
+Gtf=tf(numg,deng)
+
+Gtf =
+ 
+                                                   
+                      10000 s^2 + 750000 s + 3.5e06
+                                                   
+  ----------------------------------------------------------------------
+                                                                        
+  s^7 + 113 s^6 + 4022 s^5 + 58200 s^4 + 754275 s^3 + 4.324e06 s^2      
+                                                                        
+                                                            + 2.586e07 s
+                                                                        
+ 
+Continuous-time transfer function.
+Model Properties
+>> G=zpk(Gtf) % Konversi fungsi transfer ke zpk
+
+G =
+ 
+                 10000 (s+70) (s+5)
+  ------------------------------------------------
+  s (s+55) (s+45) (s^2 + 6s + 95) (s^2 + 7s + 110)
+ 
+Continuous-time zero/pole/gain model.
+Model Properties
+>> [r,p,k]=residue(numg,deng)
+
+r =
+
+  -0.0018 + 0.0000i
+   0.0066 + 0.0000i
+   0.9513 + 0.0896i
+   0.9513 - 0.0896i
+  -1.0213 - 0.1349i
+  -1.0213 + 0.1349i
+   0.1353 + 0.0000i
+
+
+p =
+
+ -55.0000 + 0.0000i
+ -45.0000 + 0.0000i
+  -3.5000 + 9.8869i
+  -3.5000 - 9.8869i
+  -3.0000 + 9.2736i
+  -3.0000 - 9.2736i
+   0.0000 + 0.0000i
+
+
+k =
+
+     []
+
+
+>> % No. 5 bag. (a), Tentukan bentuk polynomial dan terfaktor dari fungsi frekuensi
+>> syms s
+>> '(a)'
+
+ans =
+
+    '(a)'
+
+>> Ga=45*[(s^2+37*s+74)*(s^3+28*s^2+32*s+16)]/[(s+39)*(s+47)*(s^2+2*s+100)*(s^3+27*s^2+18*s+15)];
+>> 'Ga symbolic'
+
+ans =
+
+    'Ga symbolic'
+
+>> pretty(Ga)
+          2                3       2
+        (s  + 37 s + 74) (s  + 28 s  + 32 s + 16) 45
+-----------------------------------------------------------
+                    2                3       2
+(s + 39) (s + 47) (s  + 2 s + 100) (s  + 27 s  + 18 s + 15)
+
+>> [numga,denga]=numden(Ga);
+>> numga=sym2poly(numga); % Konversi dari polynomial ke simbolik matriks atau vector utk num
+>> denga=sym2poly(denga); % Konversi dari polynomial ke simbolik matriks atau vector utk den
+>> 'Ga polynomial'
+
+ans =
+
+    'Ga polynomial'
+
+>> Ga=tf(numga,denga) % membuat fungsi transfer
+
+Ga =
+ 
+                                                                   
+      45 s^5 + 2925 s^4 + 51390 s^3 + 147240 s^2 + 133200 s + 53280
+                                                                   
+  ----------------------------------------------------------------------
+                                                                        
+  s^7 + 115 s^6 + 4499 s^5 + 70700 s^4 + 553692 s^3 + 5.201e06 s^2      
+                                                                        
+                                                  + 3.483e06 s + 2.75e06
+                                                                        
+ 
+Continuous-time transfer function.
+Model Properties
+>> 'Ga factored'
+
+ans =
+
+    'Ga factored'
+
+>> Ga=zpk(Ga) % konversi fungsi transfer ke model zpk
+
+Ga =
+ 
+       45 (s+34.88) (s+26.83) (s+2.122) (s^2 + 1.17s + 0.5964)
+  -----------------------------------------------------------------
+  (s+47) (s+39) (s+26.34) (s^2 + 0.6618s + 0.5695) (s^2 + 2s + 100)
+ 
+Continuous-time zero/pole/gain model.
+Model Properties
+
+>> % No. 5 bag. (b), Tentukan bentuk polynomial dan terfaktor dari fungsi frekuensi
+>> syms s
+>> '(b)'
+
+ans =
+
+    '(b)'
+
+>> Gb=56*[(s+14)*(s^3+49*s^2+62*s+53)]/[(s^3+81*s^2+76*s+65)*(s^2+88*s+33)*(s^2+56*s+77)];
+>> 'Gb symbolic'
+
+ans =
+
+    'Gb symbolic'
+
+>> pretty(Gb)
+                      3       2
+           (s + 14) (s  + 49 s  + 62 s + 53) 56
+----------------------------------------------------------
+  2                2                3       2
+(s  + 88 s + 33) (s  + 56 s + 77) (s  + 81 s  + 76 s + 65)
+
+>> [numgb,dengb]=numden(Gb);
+>> numgb=sym2poly(numgb); % Konversi dari polynomial ke simbolik matriks atau vector utk num
+>> dengb=sym2poly(dengb); % Konversi dari polynomial ke simbolik matriks atau vector utk den
+>> 'Gb polynomial'
+
+ans =
+
+    'Gb polynomial'
+
+>> Gb=tf(numgb,dengb) % membuat fungsi transfer
+
+Gb =
+ 
+                                                            
+             56 s^4 + 3528 s^3 + 41888 s^2 + 51576 s + 41552
+                                                            
+  ----------------------------------------------------------------------
+                                                                        
+  s^7 + 225 s^6 + 16778 s^5 + 427711 s^4 + 1.093e06 s^3 + 1.189e06 s^2  
+                                                                        
+                                                     + 753676 s + 165165
+                                                                        
+ 
+Continuous-time transfer function.
+Model Properties
+>> 'Gb factored'
+
+ans =
+
+    'Gb factored'
+
+>> Gb=zpk(Gb)% konversi fungsi transfer ke model zpk
+
+Gb =
+ 
+                                                            
+                  56 (s+47.72) (s+14) (s^2 + 1.276s + 1.111)
+                                                            
+  ---------------------------------------------------------------------------
+                                                                             
+  (s+87.62) (s+80.06) (s+54.59) (s+1.411) (s+0.3766) (s^2 + 0.9391s + 0.8119)
+                                                                             
+                                                                             
+ 
+Continuous-time zero/pole/gain model.
+Model Properties
+>> 
